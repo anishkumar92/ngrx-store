@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import {  Store } from "@ngrx/store";
 import { Observable } from "rxjs";
+import * as PostActions from "./post/post.actions";
+import { Post } from './post/post.model';
 
 interface AppState {
-  message: string;
+  post: Post;
 }
 
 @Component({
@@ -13,17 +15,27 @@ interface AppState {
 })
 export class AppComponent {
   title = 'ngrx-tut';
-  message$: Observable<string>;
+  post: Observable<Post>;
+  textb: string;
 constructor(private store: Store<AppState>){
-this.message$ = this.store.select('message')
+this.post = this.store.select('post')
 }
 
-spanishMessage(){
-  this.store.dispatch({type: 'SPANISH'})
+editText(val){
+  console.log(this.textb,val,"ngmodel")
+  this.store.dispatch(new PostActions.EditText(val))
 }
 
-frenchMessage(){
-  this.store.dispatch({type: 'FRENCH'})
+upvote(){
+  this.store.dispatch(new PostActions.Upvote())
+}
+
+downvote(){
+  this.store.dispatch(new PostActions.Downvote())
+}
+
+resetPost(){
+  this.store.dispatch(new PostActions.Reset())
 }
 
 }
